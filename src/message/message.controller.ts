@@ -1,4 +1,4 @@
-import express, { response } from 'express';
+import { RequestHandler } from 'express';
 import { IDatabaseMessage } from '../../types';
 import { Controller } from '../common/Controller';
 import environment from '../config/environment';
@@ -6,7 +6,7 @@ import { CreateMessageService } from './services/CreateMessageService';
 import { GetLastMessagesService } from './services/GetLastMessagesService';
 
 export class MessageController extends Controller {
-  createMessage(): express.RequestHandler {
+  createMessage(): RequestHandler {
     return async (req, res, next) => {
       const { text } = req.body.message;
       const { id } = req.authenticated.user;
@@ -17,7 +17,7 @@ export class MessageController extends Controller {
     };
   }
 
-  getLastMessages(): express.RequestHandler {
+  getLastMessages(): RequestHandler {
     return async (req, res, next) => {
       let ammountGetMessages =
         Number.parseInt(req.query.ammountMessages as string) ||

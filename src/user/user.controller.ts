@@ -1,7 +1,6 @@
 import { User } from '.prisma/client';
-import express, { response } from 'express';
+import { RequestHandler } from 'express';
 import { Controller } from '../common/Controller';
-import environment from '../config/environment';
 import {
   AuthenticateUserService,
   IAuthResponse,
@@ -9,7 +8,7 @@ import {
 import { ProfileUserService } from './services/ProfileUserService';
 
 export class UserController extends Controller {
-  profileUser(): express.RequestHandler {
+  profileUser(): RequestHandler {
     return async (req, res, next) => {
       const { id } = req.authenticated.user;
 
@@ -18,7 +17,7 @@ export class UserController extends Controller {
     };
   }
 
-  authenticate(): express.RequestHandler {
+  authenticate(): RequestHandler {
     return async (req, res, next) => {
       const { code, source } = req.body;
 
