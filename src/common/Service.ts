@@ -1,8 +1,12 @@
 import { hostname } from 'os';
+import fs from 'fs';
 
+const appPackage = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
+const version = appPackage.version;
 export interface IServiceEnvelope<T> {
   meta: {
     self: string;
+    version: string;
     count: number;
   };
   records: T[];
@@ -13,6 +17,7 @@ export class Service<T> {
     const response = {
       meta: {
         self: hostname(),
+        version,
         count: 1,
       },
       records: [],
