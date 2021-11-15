@@ -6,17 +6,15 @@ export default {
     secret: process.env.JWT_SECRET as string,
   },
   authentication: {
-    front: {
-      id: process.env.FRONT_GITHUB_OAUTH_ID as string,
-      secret: process.env.FRONT_GITHUB_OAUTH_SECRET as string,
-    },
-    mobile: {
-      id: process.env.MOBILE_GITHUB_OAUTH_ID as string,
-      secret: process.env.MOBILE_GITHUB_OAUTH_SECRET as string,
-    },
     github: {
-      id: process.env.GITHUB_OAUTH_ID as string,
-      secret: process.env.GITHUB_OAUTH_SECRET as string,
+      web: {
+        clientId: process.env.WEB_GITHUB_OAUTH_ID as string,
+        clientSecret: process.env.WEB_GITHUB_OAUTH_SECRET as string,
+      },
+      mobile: {
+        clientId: process.env.MOBILE_GITHUB_OAUTH_ID as string,
+        clientSecret: process.env.MOBILE_GITHUB_OAUTH_SECRET as string,
+      },
     },
   },
   database: {

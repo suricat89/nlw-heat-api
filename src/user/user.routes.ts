@@ -5,7 +5,6 @@ import { UserController } from './user.controller';
 const userController = new UserController();
 const router = express.Router();
 
-router.get('/login/github', userController.loginGithub());
 router.get(
   '/profile',
   authorize('admin', 'user'),

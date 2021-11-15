@@ -6,6 +6,7 @@ import { CreateUser, Profile } from '../repository/internal/CreateUser';
 import { GetUserByGithubId } from '../repository/internal/GetUserByGithubId';
 import environment from '../../config/environment';
 import { Service } from '../../common/Service';
+import { PreconditionFailed } from '../../server/errors';
 
 export interface IJwtTokenPayload extends JwtPayload {
   user: {
@@ -21,9 +22,25 @@ export interface IAuthResponse {
   user: User;
 }
 
+export enum AuthSource {
+  WEB = 'web',
+  MOBILE = 'mobile',
+}
+
 export class AuthenticateUserService extends Service<IAuthResponse> {
-  async execute(code: string) {
-    const githubToken = await new GithubLogin().execute(code);
+  async execute(code: string, source: AuthSource) {
+    const { clientId, clientSecret } =
+      environment.authentication.github[source];
+    const githubToken = await new GithubLogin().execute(
+      code,
+      clientId,
+      clientSecret
+    );
+
+    if (!githubToken.access_token) {
+      throw new PreconditionFailed('Github auth error');
+    }
+
     const userData = await new GetUserData().execute(githubToken.access_token);
 
     let databaseUser = await new GetUserByGithubId().execute(userData.id);

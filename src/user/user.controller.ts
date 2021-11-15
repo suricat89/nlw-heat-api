@@ -9,13 +9,6 @@ import {
 import { ProfileUserService } from './services/ProfileUserService';
 
 export class UserController extends Controller {
-  loginGithub(): express.RequestHandler {
-    return async (req, res, next) => {
-      let params = `client_id=${environment.authentication.github.id}`;
-      res.redirect(`https://github.com/login/oauth/authorize?${params}`);
-    };
-  }
-
   profileUser(): express.RequestHandler {
     return async (req, res, next) => {
       const { id } = req.authenticated.user;
@@ -27,11 +20,9 @@ export class UserController extends Controller {
 
   authenticate(): express.RequestHandler {
     return async (req, res, next) => {
-      const { code } = req.body;
+      const { code, source } = req.body;
 
-      const service = new AuthenticateUserService();
-      const result = await service.execute(code);
-
+      const result = await new AuthenticateUserService().execute(code, source);
       return this.renderResponse<IAuthResponse>(res)(result);
     };
   }

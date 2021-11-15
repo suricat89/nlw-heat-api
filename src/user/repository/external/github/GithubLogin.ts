@@ -7,14 +7,14 @@ interface IAccessTokenResponse {
 }
 
 export class GithubLogin extends ExternalRepository {
-  async execute(code: string) {
+  async execute(code: string, clientId: string, clientSecret: string) {
     const response = await this.dispatchRequest<IAccessTokenResponse>(
       'POST',
       'https://github.com/login/oauth/access_token',
       {
         params: {
-          client_id: environment.authentication.github.id,
-          client_secret: environment.authentication.github.secret,
+          client_id: clientId,
+          client_secret: clientSecret,
           code,
         },
         headers: {
