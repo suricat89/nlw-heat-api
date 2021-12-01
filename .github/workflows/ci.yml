@@ -1,8 +1,8 @@
 on:
   push:
-    branches: [master]
+    branches: [master, testCoverage]
   pull_request:
-    branches: [master]
+    branches: [master, testCoverage]
 
 jobs:
   test:
@@ -38,3 +38,6 @@ jobs:
 
       - name: Run tests
         run: npm test
+      
+      - name: Collect coverage
+        uses: codecov/codecov-action@v2
