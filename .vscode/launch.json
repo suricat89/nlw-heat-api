@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ts-node",
+      "name": "Debug App",
       "type": "node",
       "request": "launch",
       "args": ["src/index.ts"],
@@ -13,7 +13,31 @@
       "envFile": "${workspaceFolder}/.env.development.debug",
       "cwd": "${workspaceRoot}",
       "protocol": "inspector",
-      "internalConsoleOptions": "openOnSessionStart"
+      "internalConsoleOptions": "openOnSessionStart",
+      "runtimeVersion": "14"
+    },
+    {
+      "type": "node",
+      "name": "vscode-jest-tests",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "preLaunchTask": "npm: preDebugTests",
+      "args": [
+        "--runInBand",
+        "--watchAll=false"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "envFile": "${workspaceFolder}/.env.test.debug",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+        "name": "Tests",
+        "type": "node",
+        "request": "launch"
+      },
+      "runtimeVersion": "14"
     }
   ]
 }
