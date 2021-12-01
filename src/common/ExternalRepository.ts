@@ -4,7 +4,7 @@ import axios, {
   AxiosError,
   AxiosResponse,
 } from 'axios';
-import { NotFound } from '../server/errors';
+import { InternalServerError } from '../server/errors';
 
 interface IRequestConfig extends Omit<AxiosRequestConfig, 'url' | 'method'> {
   timeout?: number;
@@ -23,73 +23,81 @@ export class ExternalRepository {
   async dispatchRequest<T>(
     method: Method,
     url: string,
-    config: IRequestConfig
+    config: IRequestConfig = {}
   ): Promise<T> {
     const {
       timeout = 5000,
       retries = 2,
-      acceptableStatusCodes = this.successStatusCodes,
+      acceptableStatusCodes = this.successStatusCodes
     } = config;
 
     for (let i = 0; i < retries; i++) {
       try {
         const response = await axios.request({
           ...config,
+          timeout,
           method,
-          url,
+          url
         });
 
         if (!acceptableStatusCodes.some((s) => s === response.status)) {
-          this._logAxiosResponse(response);
+          this._logAxiosResponse(response, config.data);
         }
 
         return response.data as T;
       } catch (error) {
         if ((error as AxiosError).isAxiosError) {
-          this._logAxiosError(error as AxiosError);
+          this._logAxiosError(error as AxiosError, config.data);
           continue;
         }
-        console.log(error);
+        console.error(error);
       }
     }
 
-    throw new NotFound(`Error fetching URL [${method}] '${url}'`);
+    throw new InternalServerError(`Error fetching URL [${method}] '${url}'`);
   }
 
-  _logAxiosResponse(response: AxiosResponse) {
+  _logAxiosResponse(response: AxiosResponse, reqData: any) {
     const objLog = {
-      request: response.request,
+      request: {
+        method: response.request.method,
+        protocol: response.request.protocol,
+        host: response.request.host,
+        path: response.request.path,
+        headers: response.request.headers,
+        data: reqData
+      },
       response: {
         config: response.config,
         data: response.data,
         headers: response.headers,
         status: response.status,
-        statusText: response.statusText,
-      },
+        statusText: response.statusText
+      }
     };
 
     console.log(JSON.stringify(objLog));
   }
 
-  _logAxiosError(error: AxiosError) {
+  _logAxiosError(error: AxiosError, reqData: any) {
     const objError = {
       request: {
-        method: error.request?.method,
-        protocol: error.request?.protocol,
-        host: error.request?.host,
-        path: error.request?.path,
-        headers: error.request?.headers,
-        data: JSON.stringify(error.request),
+        method: error.request.method,
+        protocol: error.request.protocol,
+        host: error.request.host,
+        path: error.request.path,
+        headers: error.request.headers,
+        data: reqData
       },
       response: {
-        config: error.response?.config,
-        data: error.response?.data,
-        headers: error.response?.headers,
-        status: error.response?.status,
-        statusText: error.response?.statusText,
+        config: error.response.config,
+        data: error.response.data,
+        headers: error.response.headers,
+        status: error.response.status,
+        statusText: error.response.statusText
       },
       message: error.message,
-      code: error.code,
+      code: error.code
     };
 
     console.log(JSON.stringify(objError));

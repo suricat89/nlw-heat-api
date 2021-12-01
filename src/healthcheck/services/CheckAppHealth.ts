@@ -1,5 +1,5 @@
 import { Service } from '../../common/Service';
-import prismaClient from '../../config/database';
+import { prismaClient } from '../../config/database';
 
 interface IDatabaseStatus {
   success: boolean;
@@ -19,11 +19,10 @@ export class CheckAppHealth extends Service<IAppHealth> {
 
   async _checkDatabaseConnectivity(): Promise<IDatabaseStatus> {
     try {
-      await prismaClient.$connect();
-      const response = await prismaClient.$queryRaw`SELECT 'OK' AS status;`;
+      const response = await this._executeTestQuery();
       return {
         success: true,
-        response: response[0],
+        response: response[0]
       };
     } catch (error) {
       return {
@@ -31,9 +30,14 @@ export class CheckAppHealth extends Service<IAppHealth> {
         response: {
           message: error.message,
           stack: error.stack,
-          ...error,
-        },
+          ...error
+        }
       };
     }
+  }
+
+  async _executeTestQuery() {
+    await prismaClient.$connect();
+    return prismaClient.$queryRaw`SELECT 'OK' AS status;`;
   }
 }

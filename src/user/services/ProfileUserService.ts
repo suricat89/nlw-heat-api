@@ -1,6 +1,5 @@
 import { User } from '.prisma/client';
 import { Service } from '../../common/Service';
-import prismaClient from '../../config/database';
 import { GetUserById } from '../repository/internal/GetUserById';
 
 export class ProfileUserService extends Service<User> {

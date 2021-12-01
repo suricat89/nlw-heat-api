@@ -1,4 +1,4 @@
-import prismaClient from '../../../config/database';
+import { prismaClient } from '../../../config/database';
 import { IGetUserResponse } from '../external/github/GetUserData';
 
 export enum Profile {

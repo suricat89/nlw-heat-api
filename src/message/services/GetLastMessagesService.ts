@@ -1,5 +1,5 @@
 import { Service } from '../../common/Service';
-import prismaClient from '../../config/database';
+import { prismaClient } from '../../config/database';
 import { IDatabaseMessage } from '../../../types';
 
 export class GetLastMessagesService extends Service<IDatabaseMessage> {

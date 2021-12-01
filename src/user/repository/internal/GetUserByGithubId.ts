@@ -1,4 +1,4 @@
-import prismaClient from '../../../config/database';
+import { prismaClient } from '../../../config/database';
 
 export class GetUserByGithubId {
   async execute(githubId: number) {

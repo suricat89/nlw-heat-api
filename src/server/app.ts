@@ -12,7 +12,7 @@ import routes from './routes';
 let server: http.Server;
 export let io: Server;
 
-async function _initApp() {
+export async function _initApp() {
   const app = express();
   server = http.createServer(app);
 
@@ -25,11 +25,11 @@ async function _initApp() {
   return app;
 }
 
-function _initSocket(app: Express) {
+export function _initSocket(app: Express.Application) {
   io = new Server(server, {
     cors: {
-      origin: '*',
-    },
+      origin: '*'
+    }
   });
 
   io.on('connection', (socket) => {

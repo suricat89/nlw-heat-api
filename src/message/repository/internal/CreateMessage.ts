@@ -1,4 +1,4 @@
-import prismaClient from '../../../config/database';
+import { prismaClient } from '../../../config/database';
 
 export class CreateMessage {
   execute(text: string, userId: string) {

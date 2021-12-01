@@ -11,24 +11,27 @@ export const authorize = (...permissions: string[]): RequestHandler => {
       throw new Unauthorized('Please provide an Authorization header');
     }
 
+    let decodedToken: IJwtTokenPayload;
     try {
-      const decodedToken = decodeToken(authorization as string);
-      const hasPermission = decodedToken.user.permissions.some(
-        (tokenPermission) =>
-          permissions.some(
-            (p) => p.toLowerCase() === tokenPermission.toLowerCase()
-          )
-      );
-
-      if (!hasPermission) {
-        throw new Forbidden('You are not allowed to access this resource');
-      }
-
-      req.authenticated = decodedToken;
-      return next();
+      decodedToken = decodeToken(authorization as string);
     } catch (error) {
       throw new Unauthorized('Invalid Authorization header');
     }
+
+    const hasPermission = decodedToken.user.permissions?.some(
+      (tokenPermission) =>
+        permissions.some(
+          (p) => p.toLowerCase() === tokenPermission.toLowerCase()
+        )
+    );
+
+    if (!hasPermission) {
+      throw new Forbidden('You are not allowed to access this resource');
+    }
+
+    req.authenticated = decodedToken;
+    return next();
+  
   };
 };
 

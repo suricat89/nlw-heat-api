@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ExternalRepository } from '../../../../common/ExternalRepository';
 
 export interface IGetUserResponse {
