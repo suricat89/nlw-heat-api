@@ -1,16 +1,20 @@
 version: 2
 
 jobs:
-  test:
+  node16_pg12:
     docker:
-      - image: node:16
-      - image: postgres:12
-        auth:
-            username: nlwheat_usr
-            password: test
+      - image: circleci/node:16
+      - image: circleci/postgres:12
         environment:
+          POSTGRES_USER: nlwheat_usr
+          POSTGRES_PASSWORD: test
           POSTGRES_DB: nlwheat_db
     steps:
       - checkout
       - run: npm install
       - run: npm test
+workflows:
+  version: 2
+  test:
+    jobs:
+      - node16_pg12
