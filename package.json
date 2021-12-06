@@ -10,7 +10,7 @@
     "build": "tsc",
     "tsc": "tsc",
     "test": ". ./bin/test.sh",
-    "jest": "node_modules/.bin/jest --runInBand",
+    "jest": "node_modules/.bin/jest --runInBand --collectCoverage=true",
     "preDebugTests": ". ./bin/pre-test.sh",
     "runMigrations": "node_modules/.bin/prisma migrate deploy"
   },

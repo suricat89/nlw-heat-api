@@ -18,6 +18,8 @@ jobs:
             DATABASE_URL: postgresql://nlwheat_usr:test@localhost:5432/nlwheat_db?schema=public
             NODE_ENV: test
             JWT_SECRET: test
+      - store_artifacts:
+          path: coverage
 workflows:
   version: 2
   test:
