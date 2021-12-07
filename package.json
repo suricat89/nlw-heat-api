@@ -11,6 +11,7 @@
     "tsc": "tsc",
     "test": ". ./bin/test.sh",
     "jest": "node_modules/.bin/jest --runInBand --collectCoverage=true",
+    "posttest": "jest-coverage-badges output ./jest/badges",
     "preDebugTests": ". ./bin/pre-test.sh",
     "runMigrations": "node_modules/.bin/prisma migrate deploy"
   },
@@ -47,6 +48,7 @@
     "@types/supertest": "^2.0.11",
     "babel-jest": "^27.3.1",
     "jest": "^27.3.1",
+    "jest-coverage-badges": "^1.1.2",
     "nock": "^13.2.1",
     "prisma": "^3.3.0",
     "supertest": "^6.1.6",

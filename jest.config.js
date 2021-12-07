@@ -5,6 +5,7 @@ module.exports = {
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: 'coverage',
+  coverageReporters: ['json-summary', 'text', 'lcov'],
   testMatch: ['**/__tests__/**/*.spec.[jt]s?(x)'],
   coveragePathIgnorePatterns: [
     '/node_modules/',
