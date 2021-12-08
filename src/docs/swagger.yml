@@ -1,0 +1,285 @@
+openapi: '3.0.2'
+info:
+  title: NLW Heat API
+  version: '1.0'
+tags:
+  - name: Healthcheck
+  - name: User
+  - name: Message
+servers:
+  - url: http://localhost:4000
+paths:
+  /ping:
+    description: Basic liveness healthcheck
+    get:
+      tags:
+        - Healthcheck
+      responses:
+        '200':
+          description: OK
+  /health:
+    description: Checks app health and database connectivity. Ideal for k8s readiness probe.
+    get:
+      tags:
+        - Healthcheck
+      responses:
+        '200':
+          description: App is Healthy and may continue reciving requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHealthResponse'
+        '500':
+          description: App is not ready to receive requests and should be removed from Load Balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHealthResponse'
+  /user/profile:
+    get:
+      security:
+        - BearerAuth: ['userToken']
+      tags:
+        - User
+      responses:
+        '200':
+          description: Got user profile.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserProfileResponse'
+        '204':
+          description: User does not exist on database
+        '401':
+          description: User unauthorized (without or invalid token), please check your credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access forbidden (valid token, but no access to this resource), please check your credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /user/authenticate:
+    post:
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUserAuthenticateRequest'
+      responses:
+        '200':
+          description: Authenticated with success and received token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostUserAuthenticateResponse'
+        '400':
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '412':
+          description: Github auth error, check if request `code` is valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /message/last:
+    get:
+      security:
+        - BearerAuth: ['userToken']
+      tags:
+        - Message
+      parameters:
+        - in: query
+          name: ammountMessages
+          schema:
+            type: number
+            default: 3
+      responses:
+        '200':
+          description: Got last N messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMessageLastResponse'
+        '401':
+          description: User unauthorized (without or invalid token), please check your credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access forbidden (valid token, but no access to this resource), please check your credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /message:
+    post:
+      security:
+        - BearerAuth: ['userToken']
+      tags:
+        - Message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostMessageRequest'
+      responses:
+        '200':
+          description: Got last N messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostMessageResponse'
+        '401':
+          description: User unauthorized (without or invalid token), please check your credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Access forbidden (valid token, but no access to this resource), please check your credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    GetHealthResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          properties:
+            records:
+              type: array
+              items: 
+                type: object
+                properties:
+                  databaseStatus:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                      response:
+                        type: object
+    GetUserProfileResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          properties:
+            records:
+              type: array
+              items: 
+                $ref: '#/components/schemas/UserModel'
+    PostUserAuthenticateRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        source:
+          type: string
+          enum:
+            - web
+            - mobile
+    PostUserAuthenticateResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          properties:
+            records:
+              type: array
+              items: 
+                type: object
+                properties:
+                  token: 
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/UserModel'
+    GetMessageLastResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          properties:
+            records:
+              type: array
+              items: 
+                $ref: '#/components/schemas/MessageModel'
+    PostMessageRequest:
+      type: object
+      properties:
+        message:
+          type: object
+          properties:
+            text:
+              type: string
+    PostMessageResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          properties:
+            records:
+              type: array
+              items: 
+                $ref: '#/components/schemas/MessageModel'
+    UserModel:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        github_id:
+          type: number
+        avatar_url:
+          type: string
+        login:
+          type: string
+        profile:
+          type: string
+          enum:
+            - user
+            - admin
+    MessageModel:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        created_at:
+          type: string
+        user_id:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserModel'
+    BasicResponse:
+      type: object
+      properties:
+        meta: 
+          type: object
+          properties:
+            self:
+              type: string
+            version:
+              type: string
+            count:
+              type: number
+        records:
+          type: array
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
