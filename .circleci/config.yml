@@ -20,6 +20,8 @@ jobs:
             JWT_SECRET: test
       - store_artifacts:
           path: coverage
+      - store_test_results:
+          path: coverage
 workflows:
   version: 2
   test:
