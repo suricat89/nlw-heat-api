@@ -32,14 +32,13 @@ jobs:
       - run: 'echo pipeline.git.revision: << pipeline.git.revision >>'
       - run: 'echo AWS_REGION: ${AWS_DEFAULT_REGION}'
       - run: 'export GIT_REPOSITORY=$(echo << pipeline.project.git_url>> | sed "s/https:\/\/github.com\///g") && echo $GIT_REPOSITORY'
-      - run: 'echo GIT_REPOSITORY: $GIT_REPOSITORY'
       - aws-cli/setup
       - run: |
           aws deploy create-deployment \
           --application-name nlw-heat-api \
           --deployment-group-name master \
           --deployment-config-name CodeDeployDefault.OneAtATime \
-          --github-location repository=$GIT_REPOSITORY,commitId=<< pipeline.git.revision >>
+          --github-location repository=$(echo << pipeline.project.git_url>> | sed "s/https:\/\/github.com\///g"),commitId=<< pipeline.git.revision >>
 workflows:
   version: 2
   test:
