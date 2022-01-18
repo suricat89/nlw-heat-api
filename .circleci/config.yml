@@ -31,9 +31,9 @@ jobs:
       - run: 'echo pipeline.project.git_url: ${pipeline.project.git_url}'
       - run: 'echo pipeline.git.tag: ${pipeline.git.tag}'
       - aws-cli/setup:
-          aws-access-key-id: $AWS_ACCESS_KEY_ID
-          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
-          aws-region: $AWS_REGION
+          aws-access-key-id: ${AWS_ACCESS_KEY_ID}
+          aws-secret-access-key: ${AWS_SECRET_ACCESS_KEY}
+          aws-region: ${AWS_REGION}
       - run: |
           aws deploy create-deployment \
           --application-name nlw-heat-api \
