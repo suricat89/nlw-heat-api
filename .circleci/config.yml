@@ -28,18 +28,16 @@ jobs:
     executor: aws-cli/default
     steps:
       - checkout
-      - run: 'echo pipeline.project.git_url: ${pipeline.project.git_url}'
-      - run: 'echo pipeline.git.tag: ${pipeline.git.tag}'
-      - aws-cli/setup:
-          aws-access-key-id: ${AWS_ACCESS_KEY_ID}
-          aws-secret-access-key: ${AWS_SECRET_ACCESS_KEY}
-          aws-region: ${AWS_REGION}
+      - run: 'echo pipeline.project.git_url: << pipeline.project.git_url >>'
+      - run: 'echo pipeline.git.tag: << pipeline.git.tag >>'
+      - run: 'echo AWS_REGION: ${AWS_DEFAULT_REGION}'
+      - aws-cli/setup
       - run: |
           aws deploy create-deployment \
           --application-name nlw-heat-api \
           --deployment-group-name master \
           --deployment-config-name CodeDeployDefault.OneAtATime \
-          --github-location repository=${pipeline.project.git_url},commitId=${pipeline.git.tag}
+          --github-location repository=<< pipeline.project.git_url >>,commitId=<< pipeline.git.tag >>
 workflows:
   version: 2
   test:
