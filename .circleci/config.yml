@@ -45,5 +45,4 @@ workflows:
       - node16_pg12
   deploy:
     jobs:
-      - aws_deploy:
-          context: aws
+      - aws_deploy
