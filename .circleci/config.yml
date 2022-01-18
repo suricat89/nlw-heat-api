@@ -1,5 +1,7 @@
-version: 2
+version: 2.1
 
+orbs:
+  aws-cli: circleci/aws-cli@2.0
 jobs:
   node16_pg12:
     docker:
@@ -22,8 +24,28 @@ jobs:
           path: coverage
       - store_test_results:
           path: coverage
+  aws_deploy:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - run: 'echo pipeline.project.git_url: ${pipeline.project.git_url}'
+      - run: 'echo pipeline.git.tag: ${pipeline.git.tag}'
+      - aws-cli/setup:
+          aws-access-key-id: $AWS_ACCESS_KEY_ID
+          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+          aws-region: $AWS_REGION
+      - run: |
+          aws deploy create-deployment \
+          --application-name nlw-heat-api \
+          --deployment-group-name master \
+          --deployment-config-name CodeDeployDefault.OneAtATime \
+          --github-location repository=${pipeline.project.git_url},commitId=${pipeline.git.tag}
 workflows:
   version: 2
   test:
     jobs:
       - node16_pg12
+  deploy:
+    jobs:
+      - aws_deploy:
+          context: aws
