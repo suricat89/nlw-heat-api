@@ -1,4 +1,7 @@
-version: 2
+version: 2.1
+
+orbs:
+  coveralls: coveralls/coveralls@1.0.6
 
 jobs:
   node16_pg12:
@@ -18,12 +21,9 @@ jobs:
             DATABASE_URL: postgresql://nlwheat_usr:test@localhost:5432/nlwheat_db?schema=public
             NODE_ENV: test
             JWT_SECRET: test
-      - store_artifacts:
-          path: coverage
-      - store_test_results:
-          path: coverage
+      - coveralls/upload:
+          verbose: true
 workflows:
-  version: 2
   test:
     jobs:
       - node16_pg12
