@@ -1,9 +1,5 @@
-[![CircleCI](https://circleci.com/gh/suricat89/nlw-heat-api/tree/master.svg?style=svg)](https://circleci.com/gh/suricat89/nlw-heat-api/tree/master)
-
-[![CircleCI](./jest/badges/badge-statements.svg)](https://circleci.com/gh/suricat89/nlw-heat-api/tree/master)
-[![CircleCI](./jest/badges/badge-lines.svg)](https://circleci.com/gh/suricat89/nlw-heat-api/tree/master)
-[![CircleCI](./jest/badges/badge-functions.svg)](https://circleci.com/gh/suricat89/nlw-heat-api/tree/master)
-[![CircleCI](./jest/badges/badge-branches.svg)](https://circleci.com/gh/suricat89/nlw-heat-api/tree/master)
+[![CircleCI](https://circleci.com/gh/suricat89/nlw-heat-api/tree/master.svg?style=shield)](https://circleci.com/gh/suricat89/nlw-heat-api/tree/master)
+[![Coverage Status](https://coveralls.io/repos/github/suricat89/nlw-heat-api/badge.svg?branch=master)](https://coveralls.io/github/suricat89/nlw-heat-api?branch=master)
 
 # NLW Heat API
 
@@ -23,4 +19,3 @@ It has the following features:
 - ExpressJS + Socket.io
 - Jest
 - Docker Compose (for ease of Development/Tests)
-- CircleCI
