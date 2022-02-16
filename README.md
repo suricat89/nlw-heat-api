@@ -19,3 +19,6 @@ It has the following features:
 - ExpressJS + Socket.io
 - Jest
 - Docker Compose (for ease of Development/Tests)
+
+## Check it out!
+https://suricat-nlw-heat-api.herokuapp.com/docs/

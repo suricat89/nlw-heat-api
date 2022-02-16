@@ -8,6 +8,7 @@ tags:
   - name: Message
 servers:
   - url: http://localhost:4000
+  - url: https://suricat-nlw-heat-api.herokuapp.com
 paths:
   /ping:
     description: Basic liveness healthcheck
