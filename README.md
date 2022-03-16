@@ -39,12 +39,14 @@ You will need to create a Github OAuth ID and Secret for both React and React Na
 
 After all envs are set, just run
 ```bash
+source .env.development
 sudo docker-compose up
+
+# run it in production mode
 npm run build
 npm start
 
 # OR run in development mode
-sudo docker-compose up
 npm run dev
 ```
 
