@@ -12,7 +12,6 @@ It has the following features:
 - Github OAuth and easy user registration using just Github data
 - Socket communication for real time update on listeners when a message is received
 
----
 
 ## Tech Stack
 - Typescript
@@ -21,12 +20,10 @@ It has the following features:
 - Jest
 - Docker Compose (for ease of Development/Tests)
 
----
 
 ## Check it out!
 https://suricat-nlw-heat-api.herokuapp.com/docs/
 
----
 
 ## How to run it
 Install packages and copy the example env files
@@ -53,7 +50,6 @@ npm run dev
 
 Or, if you prefer, just debug it in VSCode using the `Debug App` task
 
----
 
 ### Creating Github OAuth apps
 Github -> Settings -> Developer Settings -> OAuth Apps
@@ -71,7 +67,6 @@ https://auth.expo.io/@your.github.username/nlw-heat-app
 ```
 Update .env file values for `MOBILE_GITHUB_OAUTH_ID` and `MOBILE_GITHUB_OAUTH_SECRET`
 
----
 
 ## Tests
 ```bash
